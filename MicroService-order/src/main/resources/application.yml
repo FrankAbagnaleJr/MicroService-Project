@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: order-service
+  cloud:
+    nacos:
+      server-addr: 192.168.101.65:8848
+      config:
+        file-extension: yaml
