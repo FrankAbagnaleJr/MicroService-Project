@@ -11,6 +11,7 @@
         <module>MicroService-user</module>
         <module>MicroService-order</module>
         <module>MicroService-gateway</module>
+        <module>MicroService-base</module>
     </modules>
 
     <parent>

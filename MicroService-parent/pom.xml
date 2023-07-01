@@ -17,7 +17,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-cloud.version>Hoxton.SR9</spring-cloud.version>
-        <mysql.version>5.1.47</mysql.version>
+        <mysql-connector-java.version>8.0.30</mysql-connector-java.version>
         <mybatis.version>2.1.1</mybatis.version>
         <!--在这里加一下版本nancos的版本参数-->
         <nacos.version>2.2.5.RELEASE</nacos.version>
@@ -52,7 +52,7 @@
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>${mysql.version}</version>
+                <version>${mysql-connector-java.version}</version>
             </dependency>
 
             <dependency>
