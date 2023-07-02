@@ -21,11 +21,12 @@ import org.springframework.web.bind.annotation.*;
 @Api(value = "用户管理接口",tags = "用户管理接口tags")
 public class UserContraller {
 
-
+    @Autowired
+    UserService userService;
 
     @ApiOperation("根据用户id查用户")
     @GetMapping("/list")
     public PageResult<User> list(PageParams pageParams,@RequestBody(required = false) QueryUserParamsDto queryUserParamsDto) {
-        return null;
+        return userService.queryUserList(pageParams, queryUserParamsDto);
     }
 }

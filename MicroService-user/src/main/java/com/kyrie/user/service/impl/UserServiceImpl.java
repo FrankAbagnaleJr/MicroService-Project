@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     public PageResult<User> queryUserList(PageParams pageParams, QueryUserParamsDto queryUserParamsDto) {
         Page<User> page = new Page<>(pageParams.getPageNum(),pageParams.getPageSize());
         LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>(); // TODO 未做查询条件
-        IPage iPage = userMapper.selectPage(page, lqw);
+        Page<User> iPage = userMapper.selectPage(page, lqw);
 
         PageResult<User> pageResult = new PageResult<>();
         pageResult.setItems(iPage.getRecords());
