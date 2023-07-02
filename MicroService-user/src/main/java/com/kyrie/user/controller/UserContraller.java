@@ -8,10 +8,7 @@ import com.kyrie.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @auther: jijin
@@ -28,7 +25,7 @@ public class UserContraller {
 
     @ApiOperation("根据用户id查用户")
     @GetMapping("/list")
-    public PageResult<User> list(PageParams pageParams, QueryUserParamsDto queryUserParamsDto) {
+    public PageResult<User> list(PageParams pageParams,@RequestBody(required = false) QueryUserParamsDto queryUserParamsDto) {
         return null;
     }
 }

@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
 public class PageParams {
 
     //页码
-    private Long PageNum;
+    private Long pageNum;
 
     //每页记录数
-    private Long PageSize;
+    private Long pageSize;
 }
