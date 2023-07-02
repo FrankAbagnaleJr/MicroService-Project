@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @description TODO
  */
 @RestController
-@RequestMapping("/user")
 @Api(value = "用户管理接口",tags = "用户管理接口tags")
 public class UserContraller {
 

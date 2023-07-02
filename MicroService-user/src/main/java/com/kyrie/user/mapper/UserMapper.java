@@ -5,9 +5,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-@Mapper
-public interface UserMapper {
+import java.util.List;
 
-    @Select("select * from tb_user where id = #{id}")
-    User getUserById(@Param("id") Long id);
+
+public interface UserMapper extends BaseMa {
+
 }

@@ -1,10 +1,14 @@
 package com.kyrie.user.service.impl;
 
+import com.kyrie.base.model.PageParams;
+import com.kyrie.user.dto.QueryUserParamsDto;
 import com.kyrie.user.mapper.UserMapper;
 import com.kyrie.user.pojo.User;
 import com.kyrie.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @auther: jijin
@@ -19,7 +23,8 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
 
     @Override
-    public User getUserById(Long id) {
-        return userMapper.getUserById(id);
+    public List<User> queryUserList(PageParams page, QueryUserParamsDto dto) {
+        userMapper.
+        return null;
     }
 }
