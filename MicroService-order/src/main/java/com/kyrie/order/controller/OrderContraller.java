@@ -1,5 +1,7 @@
 package com.kyrie.order.controller;
 
+import com.kyrie.base.model.PageResult;
+import com.kyrie.order.dto.QueryOrderParamsDto;
 import com.kyrie.order.pojo.Order;
 import com.kyrie.order.sercice.OrderService;
 import io.swagger.annotations.Api;
@@ -22,12 +24,11 @@ import javax.print.attribute.standard.PageRanges;
 @RestController
 @Api(value = "订单接口 value", tags = "订单接口 tags")
 public class OrderContraller {
-    @Autowired
-    OrderService orderService;
+
 
     @ApiOperation("根据订单号查询订单")
     @GetMapping("/{id}")
-    public PageRanges<Order> list(PageRanges pageRanges,Que) {
-        return orderService.getById(id);
+    public PageResult<Order> list(PageRanges pageRanges, QueryOrderParamsDto queryOrderParamsDto) {
+        return null;
     }
 }
