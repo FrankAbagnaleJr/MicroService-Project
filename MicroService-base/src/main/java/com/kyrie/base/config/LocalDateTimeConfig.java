@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
  * @version: 1.0
  * @description TODO
  */
-@Configuration
+//@Configuration
 public class LocalDateTimeConfig {
     /*
      * 序列化内容
