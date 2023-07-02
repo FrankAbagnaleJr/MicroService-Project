@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.print.attribute.standard.PageRanges;
+
 /**
  * @auther: jijin
  * @date: 2023/7/2 0:09 周日
@@ -18,14 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
  * @description TODO
  */
 @RestController
-@Api(value = "订单接口 value",tags = "订单接口 tags")
+@Api(value = "订单接口 value", tags = "订单接口 tags")
 public class OrderContraller {
     @Autowired
     OrderService orderService;
 
     @ApiOperation("根据订单号查询订单")
     @GetMapping("/{id}")
-    public Order getById(@PathVariable("id") Long id) {
+    public PageRanges<Order> list(PageRanges pageRanges,Que) {
         return orderService.getById(id);
     }
 }
