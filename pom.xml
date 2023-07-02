@@ -32,6 +32,8 @@
         <mybatis.version>2.1.1</mybatis.version>
         <!--在这里加一下版本nancos的版本参数-->
         <nacos.version>2.2.5.RELEASE</nacos.version>
+        <swagger-annotations>1.5.20</swagger-annotations>
+        <swagger-spring-boot-starter>1.9.0.RELEASE</swagger-spring-boot-starter>
 
     </properties>
 
@@ -71,6 +73,18 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger-annotations}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.spring4all</groupId>
+            <artifactId>swagger-spring-boot-starter</artifactId>
+            <version>${swagger-spring-boot-starter}</version>
         </dependency>
     </dependencies>
 

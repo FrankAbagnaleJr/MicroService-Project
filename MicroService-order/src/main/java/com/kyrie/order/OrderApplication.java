@@ -1,9 +1,11 @@
 package com.kyrie.order;
 
+import com.spring4all.swagger.EnableSwagger2Doc;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @auther: jijin
@@ -15,6 +17,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 @MapperScan("com.kyrie.order.mapper")
 @SpringBootApplication
+@EnableSwagger2
 public class OrderApplication {
     public static void main(String[] args) {
         SpringApplication.run(OrderApplication.class, args);

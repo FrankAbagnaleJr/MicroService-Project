@@ -25,7 +25,7 @@ public class MyGlobalFilter implements GlobalFilter {
          */
         MultiValueMap<String, String> queryParams = request.getQueryParams();
         //读出请求key为username的请求
-        String username = queryParams.getFirst("username");
+        String username = queryParams.getFirst("auth");
         //如果key有username且值为admin则放行
         if (username.equals("admin")) {
             return chain.filter(exchange);
