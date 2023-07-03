@@ -1,4 +1,5 @@
 package com.kyrie.order.sercice.impl;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
@@ -37,23 +38,25 @@ public class OrderServiceImpl implements OrderService {
     public PageResult<Order> list(PageParams pageParams, QueryOrderParamsDto queryOrderParamsDto) {
         Page<Order> page = new Page<>(pageParams.getPageNum(),pageParams.getPageSize());
         LambdaQueryWrapper lqw = new LambdaQueryWrapper<>();
-        Page page1 = orderMapper.selectPage(page, lqw);
+        Page<Order> page1 = orderMapper.selectPage(page, lqw);
 
         PageResult<Order> orderPageResult = new PageResult<>();
-        orderPageResult.setPage(page1.getPages());
+        orderPageResult.setPageNum(page1.getCurrent());
         orderPageResult.setPageSize(page1.getSize());
         orderPageResult.setCounts(page1.getTotal());
 
-        List<Order> list = new ArrayList<>();
-        List records = page1.getRecords();
-        for (Object record : records) {
-            Order order = (Order) record;
-            order.setUser(orderClient.selectById(order.getUserId()));
-            list.add(order);
-        }
+//        List<Order> list = new ArrayList<>();
+//        List records = page1.getRecords();
+//
+//        for (Object record : records) {
+//            Order order = (Order) record;
+//            order.setUser(orderClient.selectById(order.getUserId()));
+//            list.add(order);
+//        }
+//
+//        orderPageResult.setItems(list);
 
-        orderPageResult.setItems(list);
-
+        orderPageResult.setItems(page1.getRecords());
         return orderPageResult;
     }
 

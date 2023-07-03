@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         PageResult<User> pageResult = new PageResult<>();
         pageResult.setItems(iPage.getRecords());
         pageResult.setCounts(iPage.getTotal());
-        pageResult.setPage(iPage.getCurrent());
+        pageResult.setPageNum(iPage.getCurrent());
         pageResult.setPageSize(iPage.getSize());
 
         return pageResult;
