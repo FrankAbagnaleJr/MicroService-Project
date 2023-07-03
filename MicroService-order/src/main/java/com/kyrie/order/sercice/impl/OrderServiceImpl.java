@@ -14,6 +14,9 @@ import com.kyrie.order.sercice.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @auther: jijin
  * @date: 2023/7/2 0:05 周日
@@ -40,7 +43,17 @@ public class OrderServiceImpl implements OrderService {
         orderPageResult.setPage(page1.getPages());
         orderPageResult.setPageSize(page1.getSize());
         orderPageResult.setCounts(page1.getTotal());
-        orderPageResult.setItems(page1.getRecords());
+
+        List<Order> list = new ArrayList<>();
+        List records = page1.getRecords();
+        for (Object record : records) {
+            Order order = (Order) record;
+            order.setUser(orderClient.selectById(order.getUserId()));
+            list.add(order);
+        }
+
+        orderPageResult.setItems(list);
+
         return orderPageResult;
     }
 

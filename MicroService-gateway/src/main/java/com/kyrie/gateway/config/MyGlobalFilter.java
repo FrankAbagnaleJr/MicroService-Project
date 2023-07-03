@@ -10,7 +10,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-@Component    //把过滤器交给spring管理才生效
+//@Component    //把过滤器交给spring管理才生效
 @Order(-1)    //作用是用来在过滤器链中表示执行顺序，传的数字越小优先级越高
 public class MyGlobalFilter implements GlobalFilter {
     @Override
