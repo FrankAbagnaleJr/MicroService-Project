@@ -1,7 +1,6 @@
 package com.kyrie.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kyrie.base.model.PageParams;
 import com.kyrie.base.model.PageResult;
@@ -11,8 +10,6 @@ import com.kyrie.user.pojo.User;
 import com.kyrie.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @auther: jijin

@@ -1,8 +1,6 @@
 package com.kyrie.order.sercice.impl;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kyrie.base.model.PageParams;
 import com.kyrie.base.model.PageResult;
@@ -14,7 +12,6 @@ import com.kyrie.order.pojo.User;
 import com.kyrie.order.sercice.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,29 +32,27 @@ public class OrderServiceImpl implements OrderService {
     OrderClient orderClient;
 
     @Override
-    public PageResult<Order> list(PageParams pageParams, QueryOrderParamsDto queryOrderParamsDto) {
-        Page<Order> page = new Page<>(pageParams.getPageNum(),pageParams.getPageSize());
+    public PageResult<Order> queryOrderList(PageParams pageParams, QueryOrderParamsDto queryOrderParamsDto) {
+        Page<Order> pageParam = new Page<>(pageParams.getPageNum(),pageParams.getPageSize());
         LambdaQueryWrapper lqw = new LambdaQueryWrapper<>();
-        Page<Order> page1 = orderMapper.selectPage(page, lqw);
+        Page<Order> page = orderMapper.selectPage(pageParam, lqw);
 
-        PageResult<Order> orderPageResult = new PageResult<>();
-        orderPageResult.setPageNum(page1.getCurrent());
-        orderPageResult.setPageSize(page1.getSize());
-        orderPageResult.setCounts(page1.getTotal());
+        PageResult<Order> pageResult = new PageResult<>();
+        pageResult.setCounts(page.getTotal());
+        pageResult.setPageNum(page.getCurrent());
+        pageResult.setPageSize(page.getSize());
 
-//        List<Order> list = new ArrayList<>();
-//        List records = page1.getRecords();
-//
-//        for (Object record : records) {
-//            Order order = (Order) record;
-//            order.setUser(orderClient.selectById(order.getUserId()));
-//            list.add(order);
-//        }
-//
-//        orderPageResult.setItems(list);
+        List<Order> list = new ArrayList<>();
+        List records = page.getRecords();
 
-        orderPageResult.setItems(page1.getRecords());
-        return orderPageResult;
+        for (Object record : records) {
+            Order order = (Order) record;
+            order.setUser(orderClient.selectById(order.getUserId()));
+            list.add(order);
+        }
+        pageResult.setItems(list);
+
+        return pageResult;
     }
 
     @Override

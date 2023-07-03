@@ -30,6 +30,7 @@ public class UserContraller {
         return userService.queryUserList(pageParams, queryUserParamsDto);
     }
 
+    @ApiOperation("查单个用户")
     @GetMapping("/{id}")
     public User getById(@PathVariable("id") Long id) {
         return userService.selectById(id);

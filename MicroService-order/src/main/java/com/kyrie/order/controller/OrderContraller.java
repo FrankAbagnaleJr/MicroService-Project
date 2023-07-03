@@ -10,8 +10,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.PageRanges;
-
 /**
  * @auther: jijin
  * @date: 2023/7/2 0:09 周日
@@ -29,7 +27,7 @@ public class OrderContraller {
     @ApiOperation("根据订单号查询订单")
     @GetMapping("/list")
     public PageResult<Order> list(PageParams pageParams, @RequestBody(required = false) QueryOrderParamsDto queryOrderParamsDto) {
-        return orderService.list(pageParams,queryOrderParamsDto);
+        return orderService.queryOrderList(pageParams,queryOrderParamsDto);
     }
 
     @ApiOperation("查单个订单")

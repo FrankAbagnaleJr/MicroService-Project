@@ -5,8 +5,6 @@ import com.kyrie.base.model.PageResult;
 import com.kyrie.user.dto.QueryUserParamsDto;
 import com.kyrie.user.pojo.User;
 
-import java.util.List;
-
 public interface UserService {
     /**
      *
