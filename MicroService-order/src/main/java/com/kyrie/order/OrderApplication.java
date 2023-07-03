@@ -15,7 +15,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @description TODO
  */
 @EnableFeignClients
-@MapperScan("com.kyrie.order.mapper")
 @SpringBootApplication
 @EnableSwagger2
 public class OrderApplication {
