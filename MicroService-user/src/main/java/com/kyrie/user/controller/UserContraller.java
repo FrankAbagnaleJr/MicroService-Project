@@ -29,4 +29,9 @@ public class UserContraller {
     public PageResult<User> list(PageParams pageParams,@RequestBody(required = false) QueryUserParamsDto queryUserParamsDto) {
         return userService.queryUserList(pageParams, queryUserParamsDto);
     }
+
+    @GetMapping("/{id}")
+    public User getById(@PathVariable("id") Long id) {
+        return userService.selectById(id);
+    }
 }

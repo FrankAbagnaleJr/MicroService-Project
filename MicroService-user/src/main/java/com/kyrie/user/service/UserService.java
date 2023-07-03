@@ -15,4 +15,6 @@ public interface UserService {
      * @return
      */
     PageResult<User> queryUserList(PageParams page, QueryUserParamsDto dto);
+
+    User selectById(Long id);
 }

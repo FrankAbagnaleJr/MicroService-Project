@@ -40,6 +40,12 @@ public class UserServiceImpl implements UserService {
         pageResult.setPageSize(iPage.getSize());
 
         return pageResult;
-
     }
+
+    @Override
+    public User selectById(Long id) {
+        return userMapper.selectById(id);
+    }
+
+
 }

@@ -47,7 +47,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order getById(Long id) {
         Order order = orderMapper.selectById(id);
-        order.setUser(orderClient.getUserById(order.getUserId()));
+
+        Long userId = order.getUserId();
+        User userById = orderClient.selectById(userId);
+        order.setUser(userById);
+
         return order;
     }
 }
