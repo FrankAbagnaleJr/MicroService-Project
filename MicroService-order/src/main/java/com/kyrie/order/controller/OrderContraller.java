@@ -27,12 +27,12 @@ public class OrderContraller {
 
     @ApiOperation("根据订单号查询订单")
     @GetMapping("/list")
-    public PageResult<Order> list(@RequestBody PageRanges pageRanges,@RequestBody(required = false) QueryOrderParamsDto queryOrderParamsDto) {
+    public PageResult<Order> list(PageRanges pageRanges,@RequestBody(required = false) QueryOrderParamsDto queryOrderParamsDto) {
         return null;
     }
 
     @ApiOperation("查单个订单")
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Order getById(@PathVariable("id") Long id) {
         return orderService.getById(id);
     }
