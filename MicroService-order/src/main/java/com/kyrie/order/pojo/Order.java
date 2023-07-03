@@ -25,5 +25,6 @@ public class Order {
     private Integer sort;
     @TableField("userid")
     private Long userId;
+    @TableField(exist = false)
     private User user;
 }
