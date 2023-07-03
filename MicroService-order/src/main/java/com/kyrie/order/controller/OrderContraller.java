@@ -1,5 +1,6 @@
 package com.kyrie.order.controller;
 
+import com.kyrie.base.model.PageParams;
 import com.kyrie.base.model.PageResult;
 import com.kyrie.order.dto.QueryOrderParamsDto;
 import com.kyrie.order.pojo.Order;
@@ -27,8 +28,8 @@ public class OrderContraller {
 
     @ApiOperation("根据订单号查询订单")
     @GetMapping("/list")
-    public PageResult<Order> list(PageRanges pageRanges,@RequestBody(required = false) QueryOrderParamsDto queryOrderParamsDto) {
-        return null;
+    public PageResult<Order> list(PageParams pageParams, @RequestBody(required = false) QueryOrderParamsDto queryOrderParamsDto) {
+        return orderService.list(pageParams,queryOrderParamsDto);
     }
 
     @ApiOperation("查单个订单")
