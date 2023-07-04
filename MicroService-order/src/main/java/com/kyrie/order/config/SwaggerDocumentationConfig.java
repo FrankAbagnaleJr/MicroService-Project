@@ -36,8 +36,9 @@ public class SwaggerDocumentationConfig {
     @Bean
     public Docket customImplementation() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .enable(true)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.kyrie.order"))
+                .apis(RequestHandlerSelectors.basePackage("com.kyrie.order.controller"))
                 .build()
                 .apiInfo(apiInfo());
     }

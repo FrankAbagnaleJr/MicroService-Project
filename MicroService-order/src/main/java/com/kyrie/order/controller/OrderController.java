@@ -18,8 +18,9 @@ import org.springframework.web.bind.annotation.*;
  * @description TODO
  */
 @RestController
+@RequestMapping("/order")
 @Api(value = "订单接口 value", tags = "订单接口 tags")
-public class OrderContraller {
+public class OrderController {
 
     @Autowired
     OrderService orderService;
