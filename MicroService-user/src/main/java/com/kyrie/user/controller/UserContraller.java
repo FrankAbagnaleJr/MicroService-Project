@@ -25,7 +25,7 @@ public class UserContraller {
     UserService userService;
 
     @ApiOperation("根据用户id查用户")
-    @GetMapping("/list")
+    @PostMapping("/list")
     public PageResult<User> list(PageParams pageParams,@RequestBody(required = false) QueryUserParamsDto queryUserParamsDto) {
         return userService.queryUserList(pageParams, queryUserParamsDto);
     }

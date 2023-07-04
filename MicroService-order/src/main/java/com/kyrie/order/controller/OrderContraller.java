@@ -25,7 +25,7 @@ public class OrderContraller {
     OrderService orderService;
 
     @ApiOperation("根据订单号查询订单")
-    @GetMapping("/list")
+    @PostMapping("/list")
     public PageResult<Order> list(PageParams pageParams, @RequestBody(required = false) QueryOrderParamsDto queryOrderParamsDto) {
         return orderService.queryOrderList(pageParams,queryOrderParamsDto);
     }
