@@ -42,15 +42,18 @@ public class OrderServiceImpl implements OrderService {
         pageResult.setPageNum(page.getCurrent());
         pageResult.setPageSize(page.getSize());
 
-        List<Order> list = new ArrayList<>();
-        List records = page.getRecords();
+        page.getRecords().stream().forEach(o -> {o.setUser(orderClient.selectById(o.getUserId()));});
+        pageResult.setItems(page.getRecords());
 
-        for (Object record : records) {
-            Order order = (Order) record;
-            order.setUser(orderClient.selectById(order.getUserId()));
-            list.add(order);
-        }
-        pageResult.setItems(list);
+//        List<Order> list = new ArrayList<>();
+//        List records = page.getRecords();
+//
+//        for (Object record : records) {
+//            Order order = (Order) record;
+//            order.setUser(orderClient.selectById(order.getUserId()));
+//            list.add(order);
+//        }
+//        pageResult.setItems(list);
 
         return pageResult;
     }
