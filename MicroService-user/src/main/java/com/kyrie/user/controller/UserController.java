@@ -2,6 +2,7 @@ package com.kyrie.user.controller;
 
 import com.kyrie.base.model.PageParams;
 import com.kyrie.base.model.PageResult;
+import com.kyrie.base.model.RestResponse;
 import com.kyrie.user.dto.QueryUserParamsDto;
 import com.kyrie.user.pojo.User;
 import com.kyrie.user.service.IUserService;
@@ -45,19 +46,19 @@ public class UserController {
 //    }
 
     @PostMapping
-    public boolean saveUser(@RequestBody User user) {
-        return iUserService.save(user);
+    public RestResponse saveUser(@RequestBody User user) {
+        return new RestResponse<>(iUserService.save(user),null);
     }
 
 
     @PutMapping
-    public boolean updataUser(@RequestBody User user) {
-        return iUserService.updateById(user);
+    public RestResponse updataUser(@RequestBody User user) {
+        return new RestResponse<>(iUserService.updateById(user),null);
     }
 
     @DeleteMapping("{id}")
-    public boolean deleteUser(@PathVariable Long id) {
-        return iUserService.removeById(id);
+    public RestResponse deleteUser(@PathVariable Long id) {
+        return new RestResponse<>(iUserService.removeById(id),null);
     }
 
     @GetMapping("{id}")

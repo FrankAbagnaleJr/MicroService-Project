@@ -16,7 +16,7 @@ public class RestResponse<T> {
     /**
      * 响应编码,0为正常,-1错误
      */
-    private int code;
+    private boolean flag;
 
     /**
      * 响应提示信息
@@ -30,11 +30,11 @@ public class RestResponse<T> {
 
 
     public RestResponse() {
-        this(0, "success");
+        this(true, "success");
     }
 
-    public RestResponse(int code, String msg) {
-        this.code = code;
+    public RestResponse(boolean flag, String msg) {
+        this.flag = flag;
         this.msg = msg;
     }
 
@@ -47,13 +47,13 @@ public class RestResponse<T> {
      */
     public static <T> RestResponse<T> validfail(String msg) {
         RestResponse<T> response = new RestResponse<T>();
-        response.setCode(-1);
+        response.setFlag(false);
         response.setMsg(msg);
         return response;
     }
     public static <T> RestResponse<T> validfail(T result,String msg) {
         RestResponse<T> response = new RestResponse<T>();
-        response.setCode(-1);
+        response.setFlag(false);
         response.setResult(result);
         response.setMsg(msg);
         return response;
@@ -85,10 +85,5 @@ public class RestResponse<T> {
      */
     public static <T> RestResponse<T> success() {
         return new RestResponse<T>();
-    }
-
-
-    public Boolean isSuccessful() {
-        return this.code == 0;
     }
 }
