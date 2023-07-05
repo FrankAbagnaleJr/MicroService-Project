@@ -1,5 +1,6 @@
 package com.kyrie.user.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.kyrie.base.model.PageParams;
 import com.kyrie.base.model.PageResult;
 import com.kyrie.user.dto.QueryUserParamsDto;
@@ -15,4 +16,5 @@ public interface UserService {
     PageResult<User> queryUserList(PageParams page, QueryUserParamsDto dto);
 
     User selectById(Long id);
+
 }

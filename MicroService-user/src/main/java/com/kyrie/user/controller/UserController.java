@@ -4,11 +4,15 @@ import com.kyrie.base.model.PageParams;
 import com.kyrie.base.model.PageResult;
 import com.kyrie.user.dto.QueryUserParamsDto;
 import com.kyrie.user.pojo.User;
+import com.kyrie.user.service.IUserService;
 import com.kyrie.user.service.UserService;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @auther: jijin
@@ -19,10 +23,14 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @Api(value = "用户管理接口",tags = "用户管理接口tags")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    IUserService iUserService;
 
     @ApiOperation("根据用户id查用户")
     @PostMapping("/list")
@@ -35,4 +43,30 @@ public class UserController {
     public User getById(@PathVariable("id") Long id) {
         return userService.selectById(id);
     }
+
+    @PostMapping
+    public boolean saveUser(@RequestBody User user) {
+        return iUserService.save(user);
+    }
+
+
+    @PutMapping
+    public boolean updataUser(@RequestBody User user) {
+        return iUserService.updateById(user);
+    }
+
+    @DeleteMapping("{id}")
+    public boolean deleteUser(@PathVariable Long id) {
+        return iUserService.removeById( id);
+    }
+
+    @GetMapping
+    public User getBuId(@PathVariable Long id) {
+        return iUserService.getById(id);
+    }
+
+
+
+
+
 }
