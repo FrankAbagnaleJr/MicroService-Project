@@ -22,7 +22,7 @@ import java.util.List;
  * @description TODO
  */
 @RestController
-@Api(value = "用户管理接口",tags = "用户管理接口tags")
+@Api(value = "用户管理接口", tags = "用户管理接口tags")
 @RequestMapping("/user")
 public class UserController {
 
@@ -34,15 +34,15 @@ public class UserController {
 
     @ApiOperation("根据用户id查用户")
     @PostMapping("/list")
-    public PageResult<User> list(PageParams pageParams,@RequestBody(required = false) QueryUserParamsDto queryUserParamsDto) {
+    public PageResult<User> list(PageParams pageParams, @RequestBody(required = false) QueryUserParamsDto queryUserParamsDto) {
         return userService.queryUserList(pageParams, queryUserParamsDto);
     }
 
-    @ApiOperation("查单个用户")
-    @GetMapping("/{id}")
-    public User getById(@PathVariable("id") Long id) {
-        return userService.selectById(id);
-    }
+//    @ApiOperation("查单个用户")
+//    @GetMapping("/{id}")
+//    public User getById(@PathVariable("id") Long id) {
+//        return userService.selectById(id);
+//    }
 
     @PostMapping
     public boolean saveUser(@RequestBody User user) {
@@ -57,16 +57,18 @@ public class UserController {
 
     @DeleteMapping("{id}")
     public boolean deleteUser(@PathVariable Long id) {
-        return iUserService.removeById( id);
+        return iUserService.removeById(id);
     }
 
-    @GetMapping
+    @GetMapping("{id}")
     public User getBuId(@PathVariable Long id) {
         return iUserService.getById(id);
     }
 
-
-
+    @GetMapping
+    public List<User> getAll() {
+        return iUserService.list();
+    }
 
 
 }
