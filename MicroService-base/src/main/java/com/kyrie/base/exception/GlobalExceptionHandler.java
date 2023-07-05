@@ -22,9 +22,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MicServiceException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public RestErrorResponse customException(MicServiceException e) {
-        String errMessage = e.getErrMessage();
-        RestErrorResponse restErrorResponse = new RestErrorResponse(errMessage);
-        return restErrorResponse;
+//        String errMessage = e.getErrMessage();
+//        RestErrorResponse restErrorResponse = new RestErrorResponse(errMessage);
+//        return restErrorResponse;
+        return new RestErrorResponse(e.getErrMessage());
     }
 
     //对项目的未知异常进行处理
@@ -32,7 +33,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public RestErrorResponse exceprion(Exception e) {
-        RestErrorResponse restErrorResponse = new RestErrorResponse(CommonError.UNKOWN_ERROR.getErrMessage());
-        return restErrorResponse;
+//        RestErrorResponse restErrorResponse = new RestErrorResponse(CommonError.UNKOWN_ERROR.getErrMessage());
+//        return restErrorResponse;
+        return new RestErrorResponse(CommonError.UNKOWN_ERROR.getErrMessage());
     }
 }

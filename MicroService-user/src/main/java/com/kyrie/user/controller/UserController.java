@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @Api(value = "用户管理接口",tags = "用户管理接口tags")
-@RequestMapping("/user")
 public class UserController {
 
     @Autowired

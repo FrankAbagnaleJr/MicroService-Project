@@ -14,3 +14,16 @@ spring:
         group: mic-service-project
         file-extension: yaml
         refresh-enabled: true
+
+swagger:
+  title: "学成在线内容管理系统625103471"
+  description: "内容系统管理系统对课程相关信息进行管理"
+  base-package: com.kyrie.user.controller
+  enabled: true
+  version: 1.0.0
+  contact:
+    name: 冀金梁
+    url: http://wimoor.com
+    email: 625103471@qq.com
+  license: 许可证
+  license-url: http://wimoor.com

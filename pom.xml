@@ -32,8 +32,9 @@
         <mybatis.version>2.1.1</mybatis.version>
         <!--在这里加一下版本nancos的版本参数-->
         <nacos.version>2.2.5.RELEASE</nacos.version>
-        <swagger-annotations>1.5.20</swagger-annotations>
+        <swagger-annotations>1.6.8</swagger-annotations>
         <swagger-spring-boot-starter>1.9.0.RELEASE</swagger-spring-boot-starter>
+        <springfox-swagger2>3.0.0</springfox-swagger2>
         <mybatis-plus-boot-starter.version>3.4.1</mybatis-plus-boot-starter.version>
         <fastjson.version>1.2.83</fastjson.version>
 
@@ -77,17 +78,29 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-annotations</artifactId>
-            <version>${swagger-annotations}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.swagger</groupId>-->
+<!--            <artifactId>swagger-annotations</artifactId>-->
+<!--            <version>${swagger-annotations}</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>com.spring4all</groupId>
             <artifactId>swagger-spring-boot-starter</artifactId>
             <version>${swagger-spring-boot-starter}</version>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>io.springfox</groupId>-->
+<!--            <artifactId>springfox-swagger2</artifactId>-->
+<!--            <version>2.9.2</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>io.springfox</groupId>-->
+<!--            <artifactId>springfox-swagger-ui</artifactId>-->
+<!--            <version>2.9.2</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 

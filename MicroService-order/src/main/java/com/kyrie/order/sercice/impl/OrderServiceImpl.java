@@ -47,7 +47,6 @@ public class OrderServiceImpl implements OrderService {
 
 //        List<Order> list = new ArrayList<>();
 //        List records = page.getRecords();
-//
 //        for (Object record : records) {
 //            Order order = (Order) record;
 //            order.setUser(orderClient.selectById(order.getUserId()));
@@ -61,7 +60,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order getById(Long id) {
         Order order = orderMapper.selectById(id);
-
         Long userId = order.getUserId();
         User userById = orderClient.selectById(userId);
         order.setUser(userById);

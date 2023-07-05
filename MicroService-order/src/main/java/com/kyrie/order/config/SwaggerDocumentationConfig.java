@@ -18,8 +18,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @description TODO
  */
 
-@Configuration
-@EnableSwagger2
+//@Configuration
+//@EnableSwagger2
 public class SwaggerDocumentationConfig {
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
@@ -33,7 +33,7 @@ public class SwaggerDocumentationConfig {
                 .build();
     }
 
-    @Bean
+//    @Bean
     public Docket customImplementation() {
         return new Docket(DocumentationType.SWAGGER_2)
 //                .enable(true)
