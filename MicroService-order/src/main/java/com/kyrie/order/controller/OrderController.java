@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
  * @version: 1.0
  * @description TODO
  */
-@RestController
-@Api(value = "订单接口 value", tags = "订单接口 tags")
+//@RestController
+//@Api(value = "订单接口 value", tags = "订单接口 tags")
 public class OrderController {
 
     @Autowired

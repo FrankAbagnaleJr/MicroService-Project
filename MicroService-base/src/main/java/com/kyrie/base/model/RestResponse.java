@@ -26,7 +26,7 @@ public class RestResponse<T> {
     /**
      * 响应内容
      */
-    private T result;
+    private T data;
 
 
     public RestResponse() {
@@ -42,10 +42,10 @@ public class RestResponse<T> {
         this.msg = msg;
     }
 
-    public RestResponse(boolean flag, String msg,T result) {
+    public RestResponse(boolean flag, String msg,T data) {
         this.flag = flag;
         this.msg = msg;
-        this.result = result;
+        this.data = data;
     }
 
     /**
@@ -61,10 +61,10 @@ public class RestResponse<T> {
         response.setMsg(msg);
         return response;
     }
-    public static <T> RestResponse<T> validfail(T result,String msg) {
+    public static <T> RestResponse<T> validfail(T data,String msg) {
         RestResponse<T> response = new RestResponse<T>();
         response.setFlag(false);
-        response.setResult(result);
+        response.setData(data);
         response.setMsg(msg);
         return response;
     }
@@ -76,14 +76,14 @@ public class RestResponse<T> {
      *
      * @return RestResponse Rest服务封装相应数据
      */
-    public static <T> RestResponse<T> success(T result) {
+    public static <T> RestResponse<T> success(T data) {
         RestResponse<T> response = new RestResponse<T>();
-        response.setResult(result);
+        response.setData(data);
         return response;
     }
-    public static <T> RestResponse<T> success(T result,String msg) {
+    public static <T> RestResponse<T> success(T data,String msg) {
         RestResponse<T> response = new RestResponse<T>();
-        response.setResult(result);
+        response.setData(data);
         response.setMsg(msg);
         return response;
     }
