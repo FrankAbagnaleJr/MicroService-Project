@@ -33,9 +33,19 @@ public class RestResponse<T> {
         this(true, "success");
     }
 
+    public RestResponse(boolean flag) {
+        this.flag = flag;
+    }
+
     public RestResponse(boolean flag, String msg) {
         this.flag = flag;
         this.msg = msg;
+    }
+
+    public RestResponse(boolean flag, String msg,T result) {
+        this.flag = flag;
+        this.msg = msg;
+        this.result = result;
     }
 
     /**
