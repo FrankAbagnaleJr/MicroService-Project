@@ -16,7 +16,7 @@ public class RestResponse<T> {
     /**
      * 响应编码,0为正常,-1错误
      */
-    private int code;
+    private boolean flag;
 
     /**
      * 响应提示信息
@@ -26,16 +26,26 @@ public class RestResponse<T> {
     /**
      * 响应内容
      */
-    private T result;
+    private T data;
 
 
     public RestResponse() {
-        this(0, "success");
+        this(true, "success");
     }
 
-    public RestResponse(int code, String msg) {
-        this.code = code;
+    public RestResponse(boolean flag) {
+        this.flag = flag;
+    }
+
+    public RestResponse(boolean flag, String msg) {
+        this.flag = flag;
         this.msg = msg;
+    }
+
+    public RestResponse(boolean flag, String msg,T data) {
+        this.flag = flag;
+        this.msg = msg;
+        this.data = data;
     }
 
     /**
@@ -47,14 +57,14 @@ public class RestResponse<T> {
      */
     public static <T> RestResponse<T> validfail(String msg) {
         RestResponse<T> response = new RestResponse<T>();
-        response.setCode(-1);
+        response.setFlag(false);
         response.setMsg(msg);
         return response;
     }
-    public static <T> RestResponse<T> validfail(T result,String msg) {
+    public static <T> RestResponse<T> validfail(T data,String msg) {
         RestResponse<T> response = new RestResponse<T>();
-        response.setCode(-1);
-        response.setResult(result);
+        response.setFlag(false);
+        response.setData(data);
         response.setMsg(msg);
         return response;
     }
@@ -66,14 +76,14 @@ public class RestResponse<T> {
      *
      * @return RestResponse Rest服务封装相应数据
      */
-    public static <T> RestResponse<T> success(T result) {
+    public static <T> RestResponse<T> success(T data) {
         RestResponse<T> response = new RestResponse<T>();
-        response.setResult(result);
+        response.setData(data);
         return response;
     }
-    public static <T> RestResponse<T> success(T result,String msg) {
+    public static <T> RestResponse<T> success(T data,String msg) {
         RestResponse<T> response = new RestResponse<T>();
-        response.setResult(result);
+        response.setData(data);
         response.setMsg(msg);
         return response;
     }
@@ -85,10 +95,5 @@ public class RestResponse<T> {
      */
     public static <T> RestResponse<T> success() {
         return new RestResponse<T>();
-    }
-
-
-    public Boolean isSuccessful() {
-        return this.code == 0;
     }
 }

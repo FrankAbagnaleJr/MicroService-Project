@@ -1,6 +1,7 @@
 package com.kyrie.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.kyrie.base.model.PageParams;
 import com.kyrie.base.model.PageResult;
@@ -25,17 +26,10 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
 
     @Override
-    public PageResult<User> queryUserList(PageParams pageParams, QueryUserParamsDto queryUserParamsDto) {
+    public Page<User> queryUserList(PageParams pageParams, QueryUserParamsDto queryUserParamsDto) {
         Page<User> page = new Page<>(pageParams.getPageNum(),pageParams.getPageSize());
         LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>(); // TODO 未做查询条件
-        Page<User> iPage = userMapper.selectPage(page, lqw);
-
-        PageResult<User> pageResult = new PageResult<>();
-        pageResult.setItems(iPage.getRecords());
-        pageResult.setCounts(iPage.getTotal());
-        pageResult.setPageNum(iPage.getCurrent());
-        pageResult.setPageSize(iPage.getSize());
-
+        Page<User> pageResult = userMapper.selectPage(page, lqw);
         return pageResult;
     }
 
