@@ -9,4 +9,6 @@ import com.kyrie.user.pojo.User;
 
 public interface IUserService extends IService<User> {
     IPage queryUserList(PageParams pageParams, QueryUserParamsDto queryUserParamsDto);
+
+    User queryById(Long id);
 }
