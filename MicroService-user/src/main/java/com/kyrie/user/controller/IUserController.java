@@ -28,14 +28,21 @@ public class IUserController {
     @ApiOperation("按条件查询返回分页数据")
     @PostMapping("/listpage")
     public RestResponse list(PageParams pageParams, @RequestBody(required = false) QueryUserParamsDto queryUserParamsDto) {
-        return new RestResponse<>(true,null,iUserService.queryUserList(pageParams, queryUserParamsDto));
+        return new RestResponse<>(true, null, iUserService.queryUserList(pageParams, queryUserParamsDto));
     }
+
+//    @ApiOperation("根据id查单个用户")
+//    @GetMapping("{id}")
+//    public RestResponse getById(@PathVariable Long id) {
+//        return new RestResponse(true,"",iUserService.getById(id));
+//    }
 
     @ApiOperation("根据id查单个用户")
     @GetMapping("{id}")
     public RestResponse getById(@PathVariable Long id) {
-        return new RestResponse(true,"",iUserService.getById(id));
+        return new RestResponse(true, "", iUserService.queryById(id));
     }
+
 
     @ApiOperation("新增用户")
     @PostMapping
