@@ -9,6 +9,8 @@ import com.kyrie.user.dto.QueryUserParamsDto;
 import com.kyrie.user.mapper.UserMapper;
 import com.kyrie.user.pojo.User;
 import com.kyrie.user.service.IUserService;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -30,6 +32,9 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
     @Autowired
     RedisTemplate redisTemplate;
 
+    @Autowired
+    RedissonClient redissonClient;
+
     private final String RED_USER = "user:";
     private final String LOCK = "lock";
 
@@ -42,6 +47,58 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
 
     @Override
     public User queryById(Long id) {
+
+        User user = null;
+
+        //先从redis中查，查到了直接返回
+        user = (User) redisTemplate.opsForValue().get(RED_USER + id);
+        if (user != null) return user;
+
+        // TODO Redisson锁
+        RLock lock = redissonClient.getLock("User-lock");
+
+
+        try {
+            boolean islock = lock.tryLock(1, 10, TimeUnit.SECONDS);
+
+            //没拿到锁，自旋
+            if (!islock) return queryById(id);
+
+            //获取锁
+            lock.lock();
+
+            // TODO 得到redisson锁开始从数据库查询
+            user = userMapper.selectById(id);
+
+            //数据库查到了，再查redis，防止拿锁时已经有线程回写redis了
+            if (user != null) {
+
+                User user2 = (User) redisTemplate.opsForValue().get(RED_USER + id);
+                //这时候说明加锁前已经被别的线程缓存redis了，不需要再回写，直接返回redis中的数据
+                if (user2 != null) return user2;
+
+                //这时候说明加锁后redis确定没有数据，可以回写
+                redisTemplate.opsForValue().set(RED_USER + id, user, new Random().nextInt(10) + 1, TimeUnit.SECONDS);
+
+                //返回数据库查询到的对象
+                return user;
+            }
+
+        } catch (Exception e) {
+
+        }finally {
+            //解锁
+            lock.unlock();
+        }
+
+
+        // TODO 缓存穿透 - redis跟数据库都没，回写redis个空值，防止缓存穿透
+        redisTemplate.opsForValue().set(RED_USER, null, new Random().nextInt(10) + 1, TimeUnit.SECONDS);
+        return null;
+    }
+
+
+    public User queryById2(Long id) {
 
         User user = null;
 
