@@ -44,7 +44,7 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
         if (user != null) return user;
 
         // TODO 缓存击穿 - redis中没有从数据库查，查数据库时先加锁，防止缓存击穿,分布式锁
-        Boolean lock = redisTemplate.opsForValue().setIfAbsent("lock", "1");
+        Boolean lock = redisTemplate.opsForValue().setIfAbsent("lock", "1",new Random().nextInt(10)+1,TimeUnit.SECONDS);
         //没得到锁就自旋
         if (!lock) {
             //休眠100毫秒
