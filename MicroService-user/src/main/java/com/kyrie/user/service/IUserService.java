@@ -11,4 +11,6 @@ public interface IUserService extends IService<User> {
     IPage queryUserList(PageParams pageParams, QueryUserParamsDto queryUserParamsDto);
 
     User queryById(Long id);
+
+    boolean updateUserByID(User user);
 }

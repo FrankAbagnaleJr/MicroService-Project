@@ -1,5 +1,6 @@
 package com.kyrie.user.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -17,7 +18,6 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
@@ -86,7 +86,7 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
 
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             //解锁
             redissonClientLockLock.unlock();
         }
@@ -95,6 +95,7 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
         redisTemplate.opsForValue().set(RED_USER, null, new Random().nextInt(10) + 1, TimeUnit.SECONDS);
         return null;
     }
+
 
     public User queryById2(Long id) {     //没用redisson的加锁方式，锁没有超时自动续期
 
@@ -106,7 +107,7 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
 
         String uuid = UUID.randomUUID().toString();
         // TODO 缓存击穿 - redis中没有从数据库查，查数据库时先加锁，防止缓存击穿,添加分布式锁（加锁解锁都要保证原子性）
-        Boolean lock = redisTemplate.opsForValue().setIfAbsent("lock", uuid,new Random().nextInt(10)+1,TimeUnit.SECONDS);
+        Boolean lock = redisTemplate.opsForValue().setIfAbsent("lock", uuid, new Random().nextInt(10) + 1, TimeUnit.SECONDS);
         //没得到锁就自旋
         if (!lock) {
             //休眠100毫秒后自旋
@@ -140,14 +141,14 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
             //lua脚本
             String script =
                     "if redis.call('get',KEYS[1]) == ARGV[1]" +
-                    "then" +
-                    "    return redis.call('del',KEYS[1])" +
-                    "else" +
-                    "    return 0" +
-                    "end";
+                            "then" +
+                            "    return redis.call('del',KEYS[1])" +
+                            "else" +
+                            "    return 0" +
+                            "end";
             //判锁断+删除锁 （原子性）。可以放在finally里面
             redisTemplate.execute(
-                    new DefaultRedisScript<Long>(script,Long.class),         //lua脚本，脚本返回值类型。Long是返回值类型
+                    new DefaultRedisScript<Long>(script, Long.class),         //lua脚本，脚本返回值类型。Long是返回值类型
                     Arrays.asList("lock"),                                   //数组，里面都是key
                     uuid);                                                   //value
 
@@ -158,5 +159,18 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
         // TODO 缓存穿透 - redis跟数据库都没，回写redis个空值，防止缓存穿透
         redisTemplate.opsForValue().set(RED_USER, null, new Random().nextInt(10) + 1, TimeUnit.SECONDS);
         return null;
+    }
+
+    @Override
+    public boolean updateUserByID(User user) {
+        //修改数据库
+        int i = userMapper.updateById(user);
+
+        //如果修改失败，则后返回false
+        if (i == 0) return false;
+
+        //修改成功则删除redis缓存
+        String user1 = (String) redisTemplate.opsForValue().get("user:" + user.getId());
+        return true;
     }
 }
