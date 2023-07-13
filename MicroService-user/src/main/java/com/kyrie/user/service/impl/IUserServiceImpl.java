@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -37,18 +38,24 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
 
     @Override
     public User queryById(Long id) {
+
         User user = null;
 
         //先从redis中查，查到了直接返回
         user = (User) redisTemplate.opsForValue().get(RED_USER + id);
         if (user != null) return user;
 
+        String uuid = UUID.randomUUID().toString();
         // TODO 缓存击穿 - redis中没有从数据库查，查数据库时先加锁，防止缓存击穿,分布式锁
-        Boolean lock = redisTemplate.opsForValue().setIfAbsent("lock", "1",new Random().nextInt(10)+1,TimeUnit.SECONDS);
+        Boolean lock = redisTemplate.opsForValue().setIfAbsent("lock", uuid,new Random().nextInt(10)+1,TimeUnit.SECONDS);
         //没得到锁就自旋
         if (!lock) {
-            //休眠100毫秒
-
+            //休眠100毫秒后自旋
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             //自旋
             return queryById(id);
         }
@@ -65,12 +72,14 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
 
             //这时候说明加锁后redis确定没有数据，可以回写
             redisTemplate.opsForValue().set(RED_USER + id, user, new Random().nextInt(10) + 1, TimeUnit.SECONDS);
-            //删除分布式锁
-            redisTemplate.delete("lock");
+
+            //删除分布式锁,先判断是不是自己加的锁，是就删，不是就不用管
+            String uuidLock = (String) redisTemplate.opsForValue().get(uuid);
+            if (uuid.equals(uuidLock)) redisTemplate.delete("lock");
+
             //返回对象
             return user;
         }
-
 
         // TODO 缓存穿透 - redis跟数据库都没，回写redis个空值，防止缓存穿透
         redisTemplate.opsForValue().set(RED_USER, null, new Random().nextInt(10) + 1, TimeUnit.SECONDS);
