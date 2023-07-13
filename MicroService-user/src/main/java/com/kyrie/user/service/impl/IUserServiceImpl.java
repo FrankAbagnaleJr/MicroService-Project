@@ -62,7 +62,10 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
             boolean islock = redissonClientLockLock.tryLock(1, 10, TimeUnit.SECONDS);
 
             //没拿到锁，自旋
-            if (!islock) return queryById(id);
+            if (!islock) {
+                Thread.sleep(100);
+                return queryById(id);
+            }
 
             // 得到redisson锁开始从数据库查询
             user = userMapper.selectById(id);
