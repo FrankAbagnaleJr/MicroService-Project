@@ -34,8 +34,8 @@ public class IOrderController {
 
     @ApiOperation("根据id查询单个订单")
     @GetMapping("/{id}")
-    public RestResponse listpage(@PathVariable("id") Long id) {
-        return new RestResponse(true,null,iOrderService.getById(id));
+    public RestResponse queryById(@PathVariable("id") Long id) {
+        return new RestResponse(true,null,iOrderService.queryById(id));
     }
 
     @ApiOperation("增加订单")

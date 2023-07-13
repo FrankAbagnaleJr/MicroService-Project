@@ -11,4 +11,6 @@ import java.util.List;
 
 public interface IOrderService extends IService<Order> {
     IPage queryOrderList(PageParams pageParams, QueryOrderParamsDto queryOrderParamsDto);
+
+    Order queryById(Long id);
 }
