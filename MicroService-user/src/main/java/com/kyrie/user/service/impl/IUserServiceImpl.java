@@ -45,7 +45,13 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper,User> implements IU
         //redis中没有从数据库查，查到了回写redis，并返回
         user = userMapper.selectById(id);
         if (user!=null) {
-            redisTemplate.opsForValue().set(RED_USER+id,user,10, TimeUnit.SECONDS);
+//            synchronized (this) {
+//
+//                user = (User) redisTemplate.opsForValue().get(RED_USER + id);
+//                if (user != null) return user;
+
+                redisTemplate.opsForValue().set(RED_USER+id,user,10, TimeUnit.SECONDS);
+//            }
             return user;
         }
 
