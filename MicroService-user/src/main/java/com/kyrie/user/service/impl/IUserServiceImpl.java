@@ -54,25 +54,22 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
         user = (User) redisTemplate.opsForValue().get(RED_USER + id);
         if (user != null) return user;
 
-        // TODO Redisson锁
-        RLock lock = redissonClient.getLock("User-lock");
-
+        // 获取Redisson锁（可重入），指定锁的名称
+        RLock redissonClientLockLock = redissonClient.getLock("userlock");
 
         try {
-            boolean islock = lock.tryLock(1, 10, TimeUnit.SECONDS);
+            //尝试获取锁，参数是：最大等待时间（期间回重试），锁自动释放时间，时间单位
+            boolean islock = redissonClientLockLock.tryLock(1, 10, TimeUnit.SECONDS);
 
             //没拿到锁，自旋
             if (!islock) return queryById(id);
 
-            //获取锁
-            lock.lock();
-
-            // TODO 得到redisson锁开始从数据库查询
+            // 得到redisson锁开始从数据库查询
             user = userMapper.selectById(id);
 
             //数据库查到了，再查redis，防止拿锁时已经有线程回写redis了
             if (user != null) {
-
+                //再查redis
                 User user2 = (User) redisTemplate.opsForValue().get(RED_USER + id);
                 //这时候说明加锁前已经被别的线程缓存redis了，不需要再回写，直接返回redis中的数据
                 if (user2 != null) return user2;
@@ -85,20 +82,18 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
             }
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }finally {
             //解锁
-            lock.unlock();
+            redissonClientLockLock.unlock();
         }
 
-
-        // TODO 缓存穿透 - redis跟数据库都没，回写redis个空值，防止缓存穿透
+        //缓存穿透 - redis跟数据库都没，回写redis个空值，防止缓存穿透
         redisTemplate.opsForValue().set(RED_USER, null, new Random().nextInt(10) + 1, TimeUnit.SECONDS);
         return null;
     }
 
-
-    public User queryById2(Long id) {
+    public User queryById2(Long id) {     //没用redisson的加锁方式，锁没有超时自动续期
 
         User user = null;
 
