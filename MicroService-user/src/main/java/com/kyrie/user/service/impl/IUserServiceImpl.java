@@ -43,24 +43,37 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
         user = (User) redisTemplate.opsForValue().get(RED_USER + id);
         if (user != null) return user;
 
-        // TODO 缓存击穿 - redis中没有从数据库查，查数据库时先加锁，防止缓存击穿
-        synchronized (this) {
-            user = userMapper.selectById(id);
+        // TODO 缓存击穿 - redis中没有从数据库查，查数据库时先加锁，防止缓存击穿,分布式锁
+        Boolean lock = redisTemplate.opsForValue().setIfAbsent("lock", "1");
+        //没得到锁就自旋
+        if (!lock) {
+            //休眠100毫秒
 
-            //数据库查到了，再查redis，防止拿锁时已经有线程回写redis了
-            if (user != null) {
-
-                User user2 = (User) redisTemplate.opsForValue().get(RED_USER + id);
-                //这时候说明加锁前已经被别的线程缓存redis了，不需要再回写，直接返回redis中的数据
-                if (user2 != null) return user2;
-
-                //这时候说明加锁后redis确定没有数据，可以回写
-                redisTemplate.opsForValue().set(RED_USER + id, user, new Random().nextInt(10) +1, TimeUnit.SECONDS);
-            }
+            //自旋
+            return queryById(id);
         }
 
+        // TODO 得到分布式锁开始从数据库查询
+        user = userMapper.selectById(id);
+
+        //数据库查到了，再查redis，防止拿锁时已经有线程回写redis了
+        if (user != null) {
+
+            User user2 = (User) redisTemplate.opsForValue().get(RED_USER + id);
+            //这时候说明加锁前已经被别的线程缓存redis了，不需要再回写，直接返回redis中的数据
+            if (user2 != null) return user2;
+
+            //这时候说明加锁后redis确定没有数据，可以回写
+            redisTemplate.opsForValue().set(RED_USER + id, user, new Random().nextInt(10) + 1, TimeUnit.SECONDS);
+            //删除分布式锁
+            redisTemplate.delete("lock");
+            //返回对象
+            return user;
+        }
+
+
         // TODO 缓存穿透 - redis跟数据库都没，回写redis个空值，防止缓存穿透
-        redisTemplate.opsForValue().set(RED_USER, null, new Random().nextInt(10) +1, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(RED_USER, null, new Random().nextInt(10) + 1, TimeUnit.SECONDS);
         return user;
     }
 }
