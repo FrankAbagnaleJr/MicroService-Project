@@ -50,7 +50,7 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
         if (user != null) return user;
 
         String uuid = UUID.randomUUID().toString();
-        // TODO 缓存击穿 - redis中没有从数据库查，查数据库时先加锁，防止缓存击穿,分布式锁
+        // TODO 缓存击穿 - redis中没有从数据库查，查数据库时先加锁，防止缓存击穿,添加分布式锁（加锁解锁都要保证原子性）
         Boolean lock = redisTemplate.opsForValue().setIfAbsent("lock", uuid,new Random().nextInt(10)+1,TimeUnit.SECONDS);
         //没得到锁就自旋
         if (!lock) {
@@ -77,8 +77,7 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
             //这时候说明加锁后redis确定没有数据，可以回写
             redisTemplate.opsForValue().set(RED_USER + id, user, new Random().nextInt(10) + 1, TimeUnit.SECONDS);
 
-            //删除分布式锁,先判断是不是自己加的锁，是就删，不是就不用管，判断+删除java代码不具备原子性，用lua脚本实现原子性
-
+            // TODO 删除分布式锁,先判断是不是自己加的锁，是就删，不是就不用管，判断+删除java代码不具备原子性，用lua脚本实现原子性（加锁解锁都要保证原子性）
             //String uuidLock = (String) redisTemplate.opsForValue().get(uuid);
             //if (uuid.equals(uuidLock)) redisTemplate.delete("lock");
             // 上面两行代码不具备原子性的，万一判断true，（在删除的中间锁过期了，别的线程拿到锁），这时候再执行删除又把别人的锁删了
@@ -91,18 +90,18 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
                     "else" +
                     "    return 0" +
                     "end";
-            //判锁断+删除锁 （原子性）
+            //判锁断+删除锁 （原子性）。可以放在finally里面
             redisTemplate.execute(
-                    new DefaultRedisScript<Integer>(script,Integer.class),     //lua脚本，脚本返回值类型。Integer是返回值类型
-                    Arrays.asList("lock"),                                     //数组，里面都是key
-                    uuid);                                                     //value
+                    new DefaultRedisScript<Long>(script,Long.class),         //lua脚本，脚本返回值类型。Long是返回值类型
+                    Arrays.asList("lock"),                                   //数组，里面都是key
+                    uuid);                                                   //value
 
-            //返回对象
+            //返回数据库查询到的对象
             return user;
         }
 
         // TODO 缓存穿透 - redis跟数据库都没，回写redis个空值，防止缓存穿透
         redisTemplate.opsForValue().set(RED_USER, null, new Random().nextInt(10) + 1, TimeUnit.SECONDS);
-        return user;
+        return null;
     }
 }
