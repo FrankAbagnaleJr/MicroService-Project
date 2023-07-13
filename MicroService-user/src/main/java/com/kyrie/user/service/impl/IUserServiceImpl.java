@@ -14,6 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -54,12 +55,12 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
                 if (user2 != null) return user2;
 
                 //这时候说明加锁后redis确定没有数据，可以回写
-                redisTemplate.opsForValue().set(RED_USER + id, user, 10, TimeUnit.SECONDS);
+                redisTemplate.opsForValue().set(RED_USER + id, user, new Random().nextInt(10) +1, TimeUnit.SECONDS);
             }
         }
 
         // TODO 缓存穿透 - redis跟数据库都没，回写redis个空值，防止缓存穿透
-        redisTemplate.opsForValue().set(RED_USER, null, 10, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(RED_USER, null, new Random().nextInt(10) +1, TimeUnit.SECONDS);
         return user;
     }
 }
