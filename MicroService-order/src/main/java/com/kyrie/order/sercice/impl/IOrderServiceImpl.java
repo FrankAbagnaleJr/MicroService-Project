@@ -46,10 +46,10 @@ public class IOrderServiceImpl extends ServiceImpl<OrderMapper, Order> implement
         //拼装查询条件,
         // 如果queryOrderParamsDto.getName()有值，那么就查询ordername的数据库字段，后面是查询的值
         lqw.like(StringUtils.isNotEmpty(queryOrderParamsDto.getName()), Order::getName, queryOrderParamsDto.getName());
-        //如果有价格就拼价格查询条件
-        lqw.like(Double.isNaN(queryOrderParamsDto.getPrice()),Order::getPrice,queryOrderParamsDto.getPrice());
-        //如果有数量就拼数量查询条件
-        lqw.like(StringUtils.isEmpty(String.valueOf(queryOrderParamsDto.getNumber())),Order::getSort,queryOrderParamsDto.getNumber());
+        //如果有价格就大于等于
+        lqw.ge(Double.isNaN(queryOrderParamsDto.getPrice()), Order::getPrice, queryOrderParamsDto.getPrice());
+        //如果有数量就大于等于
+        lqw.ge(StringUtils.isEmpty(String.valueOf(queryOrderParamsDto.getNumber())),Order::getSort,queryOrderParamsDto.getNumber());
 
         Page<Order> page = orderMapper.selectPage(ipage, lqw);
 
