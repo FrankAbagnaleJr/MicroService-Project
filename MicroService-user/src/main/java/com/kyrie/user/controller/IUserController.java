@@ -38,9 +38,15 @@ public class IUserController {
 //    }
 
     @ApiOperation("根据id查单个用户")
-    @GetMapping("{id}")
-    public RestResponse getById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public RestResponse qureyById(@PathVariable Long id) {
         return new RestResponse(true, "", iUserService.queryById(id));
+    }
+
+    @ApiOperation("根据id查单个用户")
+    @GetMapping("/getById/{id}")
+    public User getById(@PathVariable Long id) {
+        return iUserService.queryById(id);
     }
 
 

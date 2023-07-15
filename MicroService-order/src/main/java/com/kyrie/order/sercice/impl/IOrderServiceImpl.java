@@ -75,8 +75,9 @@ public class IOrderServiceImpl extends ServiceImpl<OrderMapper, Order> implement
             }
 
             //查询到订单封装用户对象
-//            User user = orderClient.selectById(order.getUserId());
-//            order.setUser(user);
+            Long userId = order.getUserId();
+            User user = orderClient.selectById(userId);
+            order.setUser(user);
 
             //数据库查到了，回写redis并返回
             redisTemplate.opsForValue().set("order:"+id,order,new Random().nextInt(10)+1,TimeUnit.SECONDS);
