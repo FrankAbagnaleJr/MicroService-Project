@@ -73,6 +73,8 @@ public class IOrderServiceImpl extends ServiceImpl<OrderMapper, Order> implement
                 return null;
             }
 
+
+
             //数据库查到了，回写redis并返回
             redisTemplate.opsForValue().set("order:"+id,order);
             return order;
