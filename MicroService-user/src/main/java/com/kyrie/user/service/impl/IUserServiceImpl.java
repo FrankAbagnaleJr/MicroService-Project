@@ -140,11 +140,11 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
 
             //lua脚本
             String script =
-                    "if redis.call('get',KEYS[1]) == ARGV[1]" +
+                    "if redis.call('get',KEYS[1]) == ARGV[1] " +
                             "then" +
-                            "    return redis.call('del',KEYS[1])" +
+                            "    return redis.call('del',KEYS[1]) " +
                             "else" +
-                            "    return 0" +
+                            "    return 0 " +
                             "end";
             //判锁断+删除锁 （原子性）。可以放在finally里面
             redisTemplate.execute(

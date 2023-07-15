@@ -15,8 +15,8 @@ public class RedissonConfig {
         Config config = new Config();
 
         //配置地址端口
-        config.useClusterServers().addNodeAddress("redis://192.168.101.65:6379").setPassword("redis");
-
+//        config.useClusterServers().addNodeAddress("redis://192.168.101.65:6379").setPassword("redis");
+        config.useSingleServer().setAddress("redis://192.168.101.65:6379").setPassword("redis");
         //把配置类给客户端，然后返回客户端
         return Redisson.create(config);
     }
