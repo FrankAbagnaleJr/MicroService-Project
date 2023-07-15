@@ -9,6 +9,7 @@ import com.kyrie.order.clients.OrderClient;
 import com.kyrie.order.dto.QueryOrderParamsDto;
 import com.kyrie.order.mapper.OrderMapper;
 import com.kyrie.order.pojo.Order;
+import com.kyrie.order.pojo.User;
 import com.kyrie.order.sercice.IOrderService;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -73,10 +74,12 @@ public class IOrderServiceImpl extends ServiceImpl<OrderMapper, Order> implement
                 return null;
             }
 
-
+            //查询到订单封装用户对象
+//            User user = orderClient.selectById(order.getUserId());
+//            order.setUser(user);
 
             //数据库查到了，回写redis并返回
-            redisTemplate.opsForValue().set("order:"+id,order);
+            redisTemplate.opsForValue().set("order:"+id,order,new Random().nextInt(10)+1,TimeUnit.SECONDS);
             return order;
 
         } catch (InterruptedException e) {
