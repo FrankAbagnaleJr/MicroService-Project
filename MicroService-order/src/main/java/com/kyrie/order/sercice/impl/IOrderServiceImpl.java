@@ -58,8 +58,11 @@ public class IOrderServiceImpl extends ServiceImpl<OrderMapper, Order> implement
         //先得到redisson锁
         RLock orderlock = redissonClient.getLock("orderlock");
         try {
-            //尝试加锁
-            boolean islock = orderlock.tryLock(1, 10, TimeUnit.SECONDS);
+            //尝试加锁，不会自动续期
+//            boolean islock = orderlock.tryLock(1, 10, TimeUnit.SECONDS);
+
+            //尝试加锁，会自动续期
+            boolean islock = orderlock.tryLock();
             //没得到锁，自旋重试
             if (!islock) {
                 Thread.sleep(100);
