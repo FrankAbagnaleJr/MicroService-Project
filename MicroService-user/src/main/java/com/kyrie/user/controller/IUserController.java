@@ -9,6 +9,7 @@ import com.kyrie.user.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -27,7 +28,7 @@ public class IUserController {
 
     @ApiOperation("按条件查询返回分页数据")
     @PostMapping("/listpage")
-    public RestResponse list(PageParams pageParams, @RequestBody(required = false) QueryUserParamsDto queryUserParamsDto) {
+    public RestResponse list(@Validated PageParams pageParams, @RequestBody(required = false) QueryUserParamsDto queryUserParamsDto) {
         return new RestResponse<>(true, null, iUserService.queryUserList(pageParams, queryUserParamsDto));
     }
 
