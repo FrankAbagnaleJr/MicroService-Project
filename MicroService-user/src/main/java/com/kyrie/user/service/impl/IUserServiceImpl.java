@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.base.Function;
 import com.kyrie.base.model.PageParams;
 import com.kyrie.user.dto.QueryUserParamsDto;
 import com.kyrie.user.mapper.UserMapper;
 import com.kyrie.user.pojo.User;
 import com.kyrie.user.service.IUserService;
+import org.apache.commons.lang.StringUtils;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,13 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
     @Override
     public IPage queryUserList(PageParams pageParams, @RequestBody(required = false) QueryUserParamsDto queryUserParamsDto) {
         Page page = new Page(pageParams.getPageNum(), pageParams.getPageSize());
-        LambdaQueryWrapper lqw = new LambdaQueryWrapper();
+        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper();
+
+        //拼装查询条件,名字模糊查询，年龄大于等于，创建时间大于等于
+        lqw.like(StringUtils.isEmpty(queryUserParamsDto.getName()),User::getName, queryUserParamsDto.getName());
+        lqw.ge(StringUtils.isEmpty(String.valueOf(queryUserParamsDto.getAge())), User::getAge, queryUserParamsDto.getAge());
+        lqw.ge(StringUtils.isEmpty(String.valueOf(queryUserParamsDto.getCreate())), User::getCreatetime, queryUserParamsDto.getCreate());
+
         return userMapper.selectPage(page, lqw);
     }
 
