@@ -1,7 +1,11 @@
 package com.kyrie.order.dto;
 
+import com.kyrie.base.model.PageParams;
 import lombok.Data;
 import lombok.ToString;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 /**
  * @auther: jijin
@@ -13,4 +17,13 @@ import lombok.ToString;
 @Data
 @ToString
 public class QueryOrderParamsDto {
+
+    @Size()
+    private String name;
+
+    @Min(0)
+    private double price;
+
+    @Min(0)
+    private Long number;
 }

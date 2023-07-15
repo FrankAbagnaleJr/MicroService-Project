@@ -37,11 +37,15 @@ public class IOrderServiceImpl extends ServiceImpl<OrderMapper, Order> implement
     @Override
     public IPage<Order> queryOrderList(PageParams pageParams, QueryOrderParamsDto queryOrderParamsDto) {
         Page<Order> ipage = new Page<>(pageParams.getPageNum(), pageParams.getPageSize());
+
         LambdaQueryWrapper lqw = new LambdaQueryWrapper<>();
+
         Page<Order> page = orderMapper.selectPage(ipage, lqw);
+
         page.getRecords().stream().forEach(o -> {
             o.setUser(orderClient.selectById(o.getUserId()));
         });
+
         return page;
     }
 
