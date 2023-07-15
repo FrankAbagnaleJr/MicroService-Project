@@ -58,8 +58,11 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
         RLock redissonClientLockLock = redissonClient.getLock("userlock");
 
         try {
-            //尝试获取锁，参数是：最大等待时间（期间回重试），锁自动释放时间，时间单位
-            boolean islock = redissonClientLockLock.tryLock(1, 10, TimeUnit.SECONDS);
+            //尝试获取锁，参数是：最大等待时间（期间回重试），锁自动释放时间，时间单位。不会自动续期
+//            boolean islock = redissonClientLockLock.tryLock(1, 10, TimeUnit.SECONDS);
+
+            //不添加过期时间默认是30秒。但会有看门狗自动续期
+            boolean islock = redissonClientLockLock.tryLock();
 
             //没拿到锁，自旋
             if (!islock) {
