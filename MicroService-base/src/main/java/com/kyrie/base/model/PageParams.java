@@ -27,6 +27,6 @@ public class PageParams {
 
     //每页记录数
     @NotEmpty
-    @Min(5)
+    @Min(1)
     private Long pageSize;
 }

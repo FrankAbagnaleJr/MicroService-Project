@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -41,16 +42,24 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
     private final String LOCK = "lock";
 
     @Override
-    public IPage queryUserList(PageParams pageParams, @RequestBody(required = false) QueryUserParamsDto queryUserParamsDto) {
-        Page page = new Page(pageParams.getPageNum(), pageParams.getPageSize());
-        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper();
+    public IPage<User> queryUserList(PageParams pageParams, @RequestBody(required = false) QueryUserParamsDto queryUserParamsDto) {
+
+        //创建分页查询的page对象
+        Page<User> page = new Page<>(pageParams.getPageNum(), pageParams.getPageSize());
+
+        //创建分页查询的条件对象
+        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
 
         //拼装查询条件,名字模糊查询，年龄大于等于，创建时间大于等于
-        lqw.like(StringUtils.isEmpty(queryUserParamsDto.getName()),User::getName, queryUserParamsDto.getName());
-        lqw.ge(StringUtils.isEmpty(String.valueOf(queryUserParamsDto.getAge())), User::getAge, queryUserParamsDto.getAge());
-        lqw.ge(StringUtils.isEmpty(String.valueOf(queryUserParamsDto.getCreate())), User::getCreatetime, queryUserParamsDto.getCreate());
+        lqw.like(StringUtils.isNotEmpty(queryUserParamsDto.getName()),User::getName, queryUserParamsDto.getName());
 
-        return userMapper.selectPage(page, lqw);
+        lqw.ge(StringUtils.isNotEmpty(String.valueOf(queryUserParamsDto.getAge())), User::getAge, queryUserParamsDto.getAge());
+
+        lqw.ge(StringUtils.isNotEmpty(String.valueOf(queryUserParamsDto.getCreate())), User::getCreatetime, queryUserParamsDto.getCreate());
+//        lqw.ge(true, User::getCreatetime, "2001-02-12 00:00:00");
+
+        Page<User> ipage = userMapper.selectPage(page, lqw);
+        return ipage;
     }
 
     @Override

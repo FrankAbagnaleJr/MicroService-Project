@@ -28,7 +28,7 @@ public class IUserController {
 
     @ApiOperation("按条件查询返回分页数据")
     @PostMapping("/listpage")
-    public RestResponse list(@Validated PageParams pageParams, @RequestBody(required = false) QueryUserParamsDto queryUserParamsDto) {
+    public RestResponse list(PageParams pageParams, @RequestBody(required = false) QueryUserParamsDto queryUserParamsDto) {
         return new RestResponse<>(true, null, iUserService.queryUserList(pageParams, queryUserParamsDto));
     }
 
