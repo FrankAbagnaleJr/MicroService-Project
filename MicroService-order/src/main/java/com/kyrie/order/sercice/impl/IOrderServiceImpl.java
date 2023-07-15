@@ -11,6 +11,7 @@ import com.kyrie.order.mapper.OrderMapper;
 import com.kyrie.order.pojo.Order;
 import com.kyrie.order.pojo.User;
 import com.kyrie.order.sercice.IOrderService;
+import org.apache.commons.lang.StringUtils;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +37,19 @@ public class IOrderServiceImpl extends ServiceImpl<OrderMapper, Order> implement
 
     @Override
     public IPage<Order> queryOrderList(PageParams pageParams, QueryOrderParamsDto queryOrderParamsDto) {
+
+        //创建分页查询的page对象
         Page<Order> ipage = new Page<>(pageParams.getPageNum(), pageParams.getPageSize());
 
-        LambdaQueryWrapper lqw = new LambdaQueryWrapper<>();
+        //创建分页查询的条件对象
+        LambdaQueryWrapper<Order> lqw = new LambdaQueryWrapper<>();
+        //拼装查询条件,
+        // 如果queryOrderParamsDto.getName()有值，那么就查询ordername的数据库字段，后面是查询的值
+        lqw.like(StringUtils.isNotEmpty(queryOrderParamsDto.getName()), Order::getName, queryOrderParamsDto.getName());
+        //如果有价格就拼价格查询条件
+        lqw.like(Double.isNaN(queryOrderParamsDto.getPrice()),Order::getPrice,queryOrderParamsDto.getPrice());
+        //如果有数量就拼数量查询条件
+        lqw.like(StringUtils.isEmpty(String.valueOf(queryOrderParamsDto.getNumber())),Order::getSort,queryOrderParamsDto.getNumber());
 
         Page<Order> page = orderMapper.selectPage(ipage, lqw);
 

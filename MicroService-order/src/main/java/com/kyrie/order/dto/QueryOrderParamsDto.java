@@ -1,6 +1,8 @@
 package com.kyrie.order.dto;
 
 import com.kyrie.base.model.PageParams;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.ToString;
 
@@ -16,6 +18,7 @@ import javax.validation.constraints.Size;
  */
 @Data
 @ToString
+@ApiModel(description = "分页条件模型类")
 public class QueryOrderParamsDto {
 
     @Size()
