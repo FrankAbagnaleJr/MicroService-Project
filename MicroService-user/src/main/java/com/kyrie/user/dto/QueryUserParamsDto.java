@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Past;
 import java.util.Date;
 
 /**
@@ -21,6 +22,8 @@ public class QueryUserParamsDto {
     private String name;
     private Integer age;
 
+    //Past意思是传入的时间必须是过去的日期
+    @Past
     @TableField(exist = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
