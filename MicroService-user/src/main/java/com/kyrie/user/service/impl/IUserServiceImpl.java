@@ -20,10 +20,7 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -50,13 +47,13 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
         //创建分页查询的条件对象
         LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
 
-        //拼装查询条件,名字模糊查询，年龄大于等于，创建时间大于等于
-        lqw.like(StringUtils.isNotEmpty(queryUserParamsDto.getName()),User::getName, queryUserParamsDto.getName());
-
-        lqw.ge(StringUtils.isNotEmpty(String.valueOf(queryUserParamsDto.getAge())), User::getAge, queryUserParamsDto.getAge());
-
-        lqw.ge(StringUtils.isNotEmpty(String.valueOf(queryUserParamsDto.getCreate())), User::getCreatetime, queryUserParamsDto.getCreate());
-//        lqw.ge(true, User::getCreatetime, "2001-02-12 00:00:00");
+        //拼装查询条件,
+        //名字模糊查询
+        lqw.like(Objects.nonNull(queryUserParamsDto.getName()),User::getName, queryUserParamsDto.getName());
+        //年龄大于等于 传入的年龄
+        lqw.ge(Objects.nonNull(queryUserParamsDto.getAge()), User::getAge, queryUserParamsDto.getAge());
+        //时间大于等于 传入的时间
+        lqw.ge(Objects.nonNull(queryUserParamsDto.getStartTime()), User::getCreatetime, queryUserParamsDto.getStartTime());
 
         Page<User> ipage = userMapper.selectPage(page, lqw);
         return ipage;
