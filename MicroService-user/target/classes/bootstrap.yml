@@ -24,6 +24,12 @@ spring:
         max-idle: 8
         min-idle: 0
         max-wait: 100
+  rabbitmq:
+    host: 192.168.101.65
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
 
 swagger:
   title: "用户管理系统625103471"

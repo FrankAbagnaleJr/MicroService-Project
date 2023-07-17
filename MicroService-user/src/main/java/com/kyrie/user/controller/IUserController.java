@@ -1,6 +1,5 @@
 package com.kyrie.user.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.kyrie.base.model.PageParams;
 import com.kyrie.base.model.RestResponse;
 import com.kyrie.user.dto.QueryUserParamsDto;
