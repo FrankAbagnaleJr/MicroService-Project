@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RabbitMQListener {
 
+    //监听指定队列
     @RabbitListener(queues = "userQueue")
     public void ListenerQueue(Message message){
         byte[] body = message.getBody();
