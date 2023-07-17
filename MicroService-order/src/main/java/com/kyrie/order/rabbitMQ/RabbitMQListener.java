@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class RabbitMQListener {
 
     //监听指定队列
-    @RabbitListener(queues = "userQueue")
+    @RabbitListener(queues = "user_queue")
     public void ListenerQueue(Message message){
         byte[] body = message.getBody();
         String msg = new String(body);

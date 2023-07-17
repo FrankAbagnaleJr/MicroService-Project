@@ -11,11 +11,11 @@ import java.util.UUID;
 @SpringBootTest
 public class RabbitMQSendMsg {
     @Autowired
-    RabbitTemplate rabbitTemplate;
+    private RabbitTemplate rabbitTemplate;
 
     @Test
     public void sentMsg(){
-        rabbitTemplate.convertAndSend("userExchange","user:order","用户生成了订单："+ UUID.randomUUID().toString());
+        rabbitTemplate.convertAndSend("user_exchange","user.order","用户生成了订单："+ UUID.randomUUID().toString());
     }
 
 }
